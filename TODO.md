@@ -9,8 +9,7 @@ Este arquivo reúne todas as tarefas técnicas, melhorias, ideias futuras e ajus
 - [x] Criar diretórios: `public/`, `src/`, `docs/`
 - [x] Criar subpastas (`favicon/`, `logo/`, `components/`, `data/`, `styles/`)
 - [x] Migrar `index.html` do `src/` para `public/`
-- [x] Configurar `package.json` com entrada:
-  `"dev": "parcel public/index.html"`
+- [x] Configurar `package.json` com entrada: `"dev": "parcel public/index.html"`
 - [x] Criar arquivos base: `.gitignore`, `README.md`, `TODO.md`
 
 ---
@@ -29,18 +28,36 @@ Este arquivo reúne todas as tarefas técnicas, melhorias, ideias futuras e ajus
 
 ---
 
-## 🟠 Sprint 3 — Layout, Componentes e Interações *(em planejamento)*
+## 🟠 Sprint 3 — Componentização Visual e Injeção via JavaScript *(em execução)*
 
-- [ ] Criar branch `feature/sprint-3-esqueleto`
-- [ ] Estruturar layout com SCSS modular
-- [ ] Criar componentes: `Hero`, `Sidebar`, `About`, `Contact`...
-- [ ] Integrar dados dos arquivos `.json`
-- [ ] Criar animações com `ScrollReveal` ou `Anime.js`
-- [ ] Implementar responsividade global
+- [x] Criar branch `feature/sprint-3-injecao-de-componentes-main.js`
+- [ ] Criar componentes: `Sidebar`, `MainContent`, `Hero`, `About`, `Contact`...
+- [x] Injetar componentes via `main.js`
+- [x] Reutilizar classes visuais do MVP
+- [x] Estruturar `index.html` com `<div id="app">`
+- ⚠️ Configurar aliases no `package.json`
+- [ ] Registrar preview visual dos componentes
 
 ---
 
-## 🌐 Deploy e Validações
+## 🎨 Sprint 4 — Estilização Avançada *(planejado)*
+
+- [ ] Criar variáveis SCSS e aplicar `@apply` no Tailwind
+- [ ] Refatorar layout visual: cores, espaçamentos, responsividade
+- [ ] Organizar estilos por componente (`_components.scss`, etc.)
+
+---
+
+## 🔁 Sprint 5 — Dados Dinâmicos e Interatividade *(planejado)*
+
+- [ ] Criar arquivos `.json` com dados reais (`sidebarData.json`, etc.)
+- [ ] Integrar dados via `import` nos componentes
+- [ ] Refatorar componentes para leitura dinâmica
+- [ ] Criar animações com `ScrollReveal` ou `Anime.js`
+
+---
+
+## 🌐 Sprint 6 — Deploy e Validações Técnicas *(planejado)*
 
 - [ ] Configurar hospedagem na Vercel
 - [ ] Adicionar domínio personalizado
@@ -64,6 +81,21 @@ Este arquivo reúne todas as tarefas técnicas, melhorias, ideias futuras e ajus
 
 ## 🔧 Fixes e Observações Técnicas
 
-- [ ] Adicionar validação futura sobre PostCSS (`.js`, `.mjs`, `.postcssrc`)
-- [ ] Rever estrutura dos estilos e reaproveitamento modular
-- [ ] Atualizar links e referências cruzadas entre `README.md`, `SPRINTS.md` e `sprint-X.md`
+### 🧩 Sprint 1
+- 📎 `docs/image-optimization.md` e `docs/setup.md` previstos, mas não criados
+- 📘 `SPRINTS.md` foi separado em arquivos individuais por sprint
+- 🤔 Ajuste tardio no `package.json` para apontar para `public/index.html`
+
+### 🧩 Sprint 2
+- ❗️ Arquivos PostCSS criados (`.js`, `.mjs`, `.postcssrc`), mas ainda não validados
+- 🚫 CSpell desativado via `.vscode/settings.json`; `cspell.json` mantido
+- 📂 Ajustes manuais pós-sprint: `.gitignore`, `tailwind.config.js`, pastas visuais
+
+### 🧩 Sprint 3
+- 🛠 Sprint reestruturada em fases:
+  - Componentização visual com classes do MVP
+  - Estilização refinada (Sprint 4)
+  - Dados dinâmicos e interatividade (Sprint 5)
+- 📁 Branch renomeada para refletir escopo real: `feature/sprint-3-injecao-de-componentes-main.js`
+- 📌 Fix técnico pendente: mover conteúdo estático para `sidebarData.json` e preparar leitura dinâmica
+- ⚠️ **Tentativa de Configuração de Aliases:** A configuração foi implementada, mas se mostrou incompatível com a stack. A decisão de usar imports relativos foi documentada no `README.md`.

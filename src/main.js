@@ -1,17 +1,31 @@
-// Importa os estilos
+// 🎨 Estilos globais
 import './assets/styles/tailwindcss.css';
 import './assets/styles/main.scss';
 
-// Seleciona o ponto de montagem
-const app = document.getElementById('app');
+// 🧩 Metatags dinâmicas
+// CORRIGIDO: Removi o /meta/ do caminho
+import { MetaTags } from './assets/components/meta/MetaTags.js';
+document.head.innerHTML += MetaTags();
 
-// Cria o conteúdo
-app.innerHTML = `
-  <h1 class="text-3xl font-bold text-blue-600 underline">
-    Parcel Vanilla App
-  </h1>
-  <p>Edit <code>src/index.html</code> to get started!</p>
-  <h2 class="text-xl text-blue-600 underline mt-4">
-    Hello Tailwind!
-  </h2>
-`;
+// 🧩 Componentes Estruturais
+import { Sidebar } from './assets/components/Sidebar.js';
+import { MainContent } from './assets/components/MainContent.js';
+
+// Função para montar o layout da aplicação
+function App() {
+  const appContainer = document.getElementById('app');
+
+  if (!appContainer) {
+    console.error('Elemento #app não encontrado no DOM.');
+    return;
+  }
+
+  // Injeta os componentes principais
+  appContainer.innerHTML = `
+    ${Sidebar()}
+    ${MainContent()}
+  `;
+}
+
+// Inicializa a aplicação
+App();
