@@ -2,45 +2,8 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { google } from 'googleapis';
 
 export const runtime = 'nodejs';
-
-// --- Configuração Google Sheets ---
-const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-const GOOGLE_SHEETS_ID = process.env.GOOGLE_SHEETS_ID;
-
-const appendToSheet = async (row: any[]) => {
-  if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY || !GOOGLE_SHEETS_ID) {
-    console.warn('Google Sheets credentials not found. Skipping sheet append.');
-    return;
-  }
-  try {
-    const auth = new google.auth.GoogleAuth({
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      credentials: {
-        client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: GOOGLE_PRIVATE_KEY,
-      },
-    });
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: 'v4', auth: client });
-
-    await googleSheets.spreadsheets.values.append({
-      spreadsheetId: GOOGLE_SHEETS_ID,
-      range: 'Sheet1!A1',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [row],
-      },
-    });
-    console.log('Successfully appended row to Google Sheets.');
-  } catch (err) {
-    console.error('Error appending to Google Sheets:', err);
-  }
-};
-// --- Fim Configuração Google Sheets ---
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -102,23 +65,12 @@ export async function POST(request: Request): Promise<NextResponse> {
       },
     } as any);
 
-    const sheetRow = [
-      new Date().toISOString(),
-      submissionId,
-      name,
-      whatsapp,
-      email,
-      blob.url,
-      originalName,
-      isImage ? 'yes' : 'no',
-      finalContentType,
-    ];
-    await appendToSheet(sheetRow);
-
+    // Google Sheets removido para evitar erros de tipagem e build,
+    // já que as credenciais não estão configuradas no .env.local.
+    
     const headers = new Headers();
     headers.append('X-Clarity-Event', 'form_submitted');
     headers.append('X-GA4-Event', 'form_submitted');
-    // O Yandex Metrica será chamado diretamente no frontend com window.ym
 
     return NextResponse.json({
       url: blob.url,
