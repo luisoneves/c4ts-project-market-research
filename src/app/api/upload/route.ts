@@ -18,10 +18,15 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // Convertendo para Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    
     const originalName = file.name;
-    let finalBuffer = buffer;
+    
+    // --- AQUI ESTÁ A CORREÇÃO (usando 'any' para evitar erro de ArrayBufferLike) ---
+    let finalBuffer: any = buffer; 
+    
     let finalContentType = file.type;
     let finalExtension = originalName.split('.').pop()?.toLowerCase() || 'bin';
 
@@ -66,9 +71,6 @@ export async function POST(request: Request): Promise<NextResponse> {
       },
     } as any);
 
-    // Google Sheets removido para evitar erros de tipagem e build,
-    // já que as credenciais não estão configuradas no .env.local.
-    
     const headers = new Headers();
     headers.append('X-Clarity-Event', 'form_submitted');
     headers.append('X-GA4-Event', 'form_submitted');
