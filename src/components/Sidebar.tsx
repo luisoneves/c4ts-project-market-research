@@ -1,7 +1,20 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { Github, Linkedin, Send, Moon, Sun, Mail, MapPin } from 'lucide-react';
+import {
+    Github,
+    Linkedin,
+    Send,
+    Moon,
+    Sun,
+    Mail,
+    MapPin,
+    Briefcase,
+    FolderKanban,
+    Lightbulb,
+    Users,
+} from 'lucide-react';
 import contactsData from '../data/contacts.json';
 import { ThemeMode, LocalStorageKey, THEME_CLASSES, SocialIcon } from '@/constants';
 
@@ -36,12 +49,30 @@ export default function Sidebar() {
         setDarkMode(next);
     };
 
+    const navItems = [
+        { href: '#studio', label: 'Quem somos', Icon: Users },
+        { href: '#services', label: 'Serviços', Icon: Briefcase },
+        { href: '#projects', label: 'Projetos', Icon: FolderKanban },
+        { href: '#questions', label: 'Validar Ideia', Icon: Lightbulb },
+    ];
+
+    const logoSrc = darkMode ? '/assets/logo/logo-white.svg' : '/assets/logo/logo.svg';
+
     return (
         <aside className="fixed left-0 top-0 h-screen w-80 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between p-6 overflow-y-auto z-50 transition-colors duration-300">
             {/* Top Section */}
             <div>
                 <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">C4TS</h1>
+                    <div className="flex items-center gap-2">
+                        <Image
+                            src={logoSrc}
+                            alt="C4TS logo"
+                            width={24}
+                            height={24}
+                            className="w-6 h-6"
+                        />
+                        <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">C4TS</h1>
+                    </div>
                     <button
                         onClick={toggleTheme}
                         className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -56,11 +87,18 @@ export default function Sidebar() {
                 </p>
 
                 <nav className="space-y-4">
-                    {/* Simple anchor links for single page scroll */}
-                    <a href="#studio" className="block text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Quem somos</a>
-                    <a href="#services" className="block text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Serviços</a>
-                    <a href="#projects" className="block text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Projetos</a>
-                    <a href="#questions" className="block text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Validar Ideia</a>
+                    {navItems.map(({ href, label, Icon }) => (
+                        <a
+                            key={href}
+                            href={href}
+                            className="block text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                        >
+                            <div className="flex items-center gap-2">
+                                <Icon className="w-4 h-4" />
+                                <span>{label}</span>
+                            </div>
+                        </a>
+                    ))}
                 </nav>
             </div>
 

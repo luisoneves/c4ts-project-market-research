@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     template: '%s | C4TS — Laboratório de Soluções Digitais',
     default: 'C4TS — Laboratório de Soluções Digitais',
   },
+  icons: {
+    icon: '/assets/logo/favicon.ico',
+    shortcut: '/assets/logo/favicon.ico',
+  },
   description:
     'Validamos ideias com dados reais: landing pages, MVPs em 2 semanas, automação de processos. Sem achismo — só resultados.',
   keywords: [
