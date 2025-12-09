@@ -175,10 +175,12 @@ export default function RootLayout({
             <div><img src={`https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}`} style={{position: 'absolute', left: '-9999px'}} alt="" /></div>
         </noscript>
 
-        <Sidebar />
-        <main className="ml-80 w-[calc(100%-20rem)] min-h-screen">
-          {children}
-        </main>
+        <div className="flex">
+          <Sidebar />
+          <main className="flex-1 min-h-screen transition-all duration-300">
+            {children}
+          </main>
+        </div>
         <Analytics />
       </body>
     </html>
