@@ -1,6 +1,6 @@
 // 🎨 Estilos globais (Tailwind primeiro, SCSS depois)
-import './main.css';                  // ✅ Tailwind via PostCSS
-import './assets/styles/main.scss';   // ✅ Seu SCSS personalizado
+import './main.css'; // ✅ Tailwind via PostCSS
+import './assets/styles/main.scss'; // ✅ Seu SCSS personalizado
 
 // 🧩 Metatags dinâmicas
 import { MetaTags } from './assets/components/meta/MetaTags.js';
