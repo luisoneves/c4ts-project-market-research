@@ -1,7 +1,8 @@
 // src/components/ConnectSection.tsx
+"use client";
+
 import React, { useState, useRef, useEffect } from 'react';
-// Opcional: importar Script do next/script se precisar carregar scripts de forma dinâmica
-// import Script from 'next/script';
+// import Script from 'next/script'; // Pode manter comentado se não usa
 
 declare global {
   interface Window {
@@ -12,10 +13,9 @@ declare global {
   }
 }
 
-// IDs de rastreamento (para usar no frontend) - Use variáveis de ambiente NEXT_PUBLIC_
+// IDs de rastreamento - Fallback seguro se as variáveis não existirem
 const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE';
-const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';
-const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;
+const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID || '105756046';
 
 const ConnectSection: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -61,7 +61,6 @@ const ConnectSection: React.FC = () => {
         const result = await response.json();
         console.log('Upload successful:', result);
 
-        // Disparar eventos para Clarity, GA4 e Yandex Metrica
         const clarityEventHeader = response.headers.get('X-Clarity-Event');
         if (clarityEventHeader && window.clarity) {
           window.clarity('event', clarityEventHeader);
@@ -76,11 +75,15 @@ const ConnectSection: React.FC = () => {
           });
         }
 
-        if (window.ym && YANDEX_METRICA_ID !== 105756046) { // Verifica se o ID não é o placeholder
-          window.ym(YANDEX_METRICA_ID, 'reachGoal', 'form_submitted', {
-            submissionId: submissionId,
-            fileName: file.name,
-          });
+        if (window.ym) {
+            // Conversão segura do ID para número
+            const yandexId = parseInt(String(YANDEX_METRICA_ID), 10);
+            if (!isNaN(yandexId)) {
+                window.ym(yandexId, 'reachGoal', 'form_submitted', {
+                    submissionId: submissionId,
+                    fileName: file.name,
+                });
+            }
         }
 
         alert('Formulário enviado com sucesso! Sua solicitação está sendo processada.');
@@ -112,7 +115,6 @@ const ConnectSection: React.FC = () => {
           Tem uma ideia ou precisa de uma solução? Vamos conversar.
         </p>
         <form ref={formRef} onSubmit={handleSubmit} className="mt-12 text-left space-y-6">
-          {/* Campo para Name */}
           <div>
             <label htmlFor="name" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Nome Completo
@@ -127,7 +129,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para WhatsApp */}
           <div>
             <label htmlFor="whatsapp" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               WhatsApp (com DDD)
@@ -143,7 +144,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para Email */}
           <div>
             <label htmlFor="email" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Email (Opcional)
@@ -157,7 +157,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para Upload de Arquivo */}
           <div>
             <label htmlFor="file" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Anexe seu arquivo (documento, imagem, etc.)

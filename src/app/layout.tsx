@@ -1,9 +1,10 @@
-// src/app/layout.tsx (Server Component)
+// src/app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+import Sidebar from '@/components/Sidebar';
 import Script from 'next/script';
-import LayoutClient from './layout.client'; // Importa o Client Component
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,7 +27,6 @@ export const metadata: Metadata = {
   authors: [{ name: 'Luis Otavio Neves Faustino', url: 'https://github.com/luisoneves' }],
   creator: 'Luis Otavio Neves Faustino',
   publisher: 'C4TS',
-
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
@@ -44,17 +44,15 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: 'summary_large_image',
-    site: '@luistech', // Verifique se este @ é o correto ou ajuste
-    creator: '@luistech', // Verifique se este @ é o correto ou ajuste
+    site: '@luistech',
+    creator: '@luistech',
     title: 'C4TS — Laboratório de Soluções Digitais',
     description:
       'Validamos ideias com dados reais — sem achismo. MVP em 2 semanas.',
     images: ['https://c4ts-project-market-research.vercel.app/og-image.jpg'],
   },
-
   other: {
     'application/ld+json': JSON.stringify({
       '@context': 'https://schema.org',
@@ -76,12 +74,10 @@ export const metadata: Metadata = {
   },
 };
 
-// --- SEUS IDs REAIS ---
 const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE';
 const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';
-const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;
+const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID || '105756046';
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'uix2492he4';
-// --- FIM SEUS IDs REAIS ---
 
 export default function RootLayout({
   children,
@@ -91,7 +87,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
-        {/* Google Tag Manager (GTM) - Head */}
+        {/* Scripts de Telemetria */}
         <Script
           id="gtm-script-head"
           strategy="afterInteractive"
@@ -103,7 +99,6 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
@@ -113,7 +108,6 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
-        {/* Microsoft Clarity */}
         <Script
           id="clarity-script"
           strategy="afterInteractive"
@@ -128,7 +122,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Analytics 4 (GA4) - Configuração inicial */}
         <Script
           id="ga4-script"
           strategy="afterInteractive"
@@ -148,9 +141,8 @@ export default function RootLayout({
           }}
         />
 
-        {/* Yandex.Metrika counter */}
         <Script
-          id="yandex-metrika-script"
+          id="yandex-metrica-script"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
@@ -171,13 +163,13 @@ export default function RootLayout({
           }}
         />
         <noscript>
-            <div><img src="https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}" style="position:absolute; left:-9999px;" alt="" /></div>
+            <div><img src={`https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}`} style={{position:'absolute', left:'-9999px'}} alt="" /></div>
         </noscript>
 
-        <LayoutClient>
+        <Sidebar />
+        <main className="ml-80 w-[calc(100%-20rem)] min-h-screen">
           {children}
-        </LayoutClient>
-
+        </main>
         <Analytics />
       </body>
     </html>
