@@ -49,8 +49,8 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    site: '@luistech', // Verifique se este @ é o correto ou ajuste
-    creator: '@luistech', // Verifique se este @ é o correto ou ajuste
+    site: '@luistech',
+    creator: '@luistech',
     title: 'C4TS — Laboratório de Soluções Digitais',
     description:
       'Validamos ideias com dados reais — sem achismo. MVP em 2 semanas.',
@@ -92,7 +92,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
-        {/* Google Tag Manager (GTM) - Head */}
+        {/* Scripts de Telemetria */}
         <Script
           id="gtm-script-head"
           strategy={ScriptStrategy.AFTER_INTERACTIVE}
@@ -104,7 +104,6 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
@@ -114,7 +113,6 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
-        {/* Microsoft Clarity */}
         <Script
           id="clarity-script"
           strategy={ScriptStrategy.AFTER_INTERACTIVE}
@@ -129,7 +127,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Analytics 4 (GA4) - Configuração inicial */}
         <Script
           id="ga4-script"
           strategy={ScriptStrategy.AFTER_INTERACTIVE}
@@ -149,7 +146,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* Yandex.Metrika counter */}
         <Script
           id="yandex-metrika-script"
           strategy={ScriptStrategy.AFTER_INTERACTIVE}

@@ -66,7 +66,6 @@ const ConnectSection: React.FC = () => {
         const result = await response.json();
         console.log('Upload successful:', result);
 
-        // Disparar eventos para Clarity, GA4 e Yandex Metrica
         const clarityEventHeader = response.headers.get('X-Clarity-Event');
         if (clarityEventHeader && window.clarity) {
           window.clarity('event', clarityEventHeader);
@@ -81,11 +80,15 @@ const ConnectSection: React.FC = () => {
           });
         }
 
-        if (window.ym && ANALYTICS_IDS.YANDEX !== 105756046) { // Verifica se o ID não é o placeholder
-          window.ym(ANALYTICS_IDS.YANDEX, 'reachGoal', AnalyticsEvent.FORM_SUBMITTED, {
-            submissionId: submissionId,
-            fileName: file.name,
-          });
+        if (window.ym) {
+          // Conversão segura do ID para número
+          const yandexId = typeof ANALYTICS_IDS.YANDEX === 'number' ? ANALYTICS_IDS.YANDEX : parseInt(String(ANALYTICS_IDS.YANDEX), 10);
+          if (!isNaN(yandexId)) {
+            window.ym(yandexId, 'reachGoal', AnalyticsEvent.FORM_SUBMITTED, {
+              submissionId: submissionId,
+              fileName: file.name,
+            });
+          }
         }
 
         alert(`${VALIDATION_MESSAGES.SUCCESS} ${VALIDATION_MESSAGES.PROCESSING}`);
@@ -120,7 +123,6 @@ const ConnectSection: React.FC = () => {
           Tem uma ideia ou precisa de uma solução? Vamos conversar.
         </p>
         <form ref={formRef} onSubmit={handleSubmit} className="mt-12 text-left space-y-6">
-          {/* Campo para Name */}
           <div>
             <label htmlFor="name" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Nome Completo
@@ -135,7 +137,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para WhatsApp */}
           <div>
             <label htmlFor="whatsapp" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               WhatsApp (com DDD)
@@ -151,7 +152,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para Email */}
           <div>
             <label htmlFor="email" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Email (Opcional)
@@ -165,7 +165,6 @@ const ConnectSection: React.FC = () => {
             />
           </div>
 
-          {/* Campo para Upload de Arquivo */}
           <div>
             <label htmlFor="file" className="block text-lg font-medium text-gray-700 dark:text-gray-200">
               Anexe seu arquivo (documento, imagem, etc.)

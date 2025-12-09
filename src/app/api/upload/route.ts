@@ -2,13 +2,11 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { google } from 'googleapis';
 import {
     IMAGE_MIME_TYPES,
     MimeType,
     FileExtension,
     IMAGE_PROCESSING,
-    GOOGLE_SHEETS_CONFIG,
     ProcessingStatus,
     FormField,
     EVENT_HEADERS,
@@ -16,42 +14,6 @@ import {
 } from '@/constants';
 
 export const runtime = 'nodejs';
-
-// --- Configuração Google Sheets ---
-const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-const GOOGLE_SHEETS_ID = process.env.GOOGLE_SHEETS_ID;
-
-const appendToSheet = async (row: any[]) => {
-  if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY || !GOOGLE_SHEETS_ID) {
-    console.warn('Google Sheets credentials not found. Skipping sheet append.');
-    return;
-  }
-  try {
-    const auth = new google.auth.GoogleAuth({
-      scopes: [GOOGLE_SHEETS_CONFIG.SCOPE],
-      credentials: {
-        client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: GOOGLE_PRIVATE_KEY,
-      },
-    });
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: GOOGLE_SHEETS_CONFIG.API_VERSION, auth: client as any });
-
-    await googleSheets.spreadsheets.values.append({
-      spreadsheetId: GOOGLE_SHEETS_ID,
-      range: GOOGLE_SHEETS_CONFIG.RANGE,
-      valueInputOption: GOOGLE_SHEETS_CONFIG.VALUE_INPUT_OPTION,
-      requestBody: {
-        values: [row],
-      },
-    });
-    console.log('Successfully appended row to Google Sheets.');
-  } catch (err) {
-    console.error('Error appending to Google Sheets:', err);
-  }
-};
-// --- Fim Configuração Google Sheets ---
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -66,9 +28,15 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    // Convertendo para Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     const originalName = file.name;
-    let finalBuffer = buffer;
+
+    // --- AQUI ESTÁ A CORREÇÃO (usando 'any' para evitar erro de ArrayBufferLike) ---
+    let finalBuffer: any = buffer;
+
     let finalContentType = file.type;
     let finalExtension = originalName.split('.').pop()?.toLowerCase() || FileExtension.BIN;
 
@@ -120,23 +88,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       },
     } as any);
 
-    const sheetRow = [
-      new Date().toISOString(),
-      submissionId,
-      name,
-      whatsapp,
-      email,
-      blob.url,
-      originalName,
-      isImage ? ProcessingStatus.YES : ProcessingStatus.NO,
-      finalContentType,
-    ];
-    await appendToSheet(sheetRow);
-
     const headers = new Headers();
     headers.append(EVENT_HEADERS.CLARITY, AnalyticsEvent.FORM_SUBMITTED);
     headers.append(EVENT_HEADERS.GA4, AnalyticsEvent.FORM_SUBMITTED);
-    // O Yandex Metrica será chamado diretamente no frontend
 
     return NextResponse.json({
       url: blob.url,
