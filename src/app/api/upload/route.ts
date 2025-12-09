@@ -18,7 +18,8 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
     const originalName = file.name;
     let finalBuffer = buffer;
     let finalContentType = file.type;
