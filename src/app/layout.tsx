@@ -80,10 +80,10 @@ export const metadata: Metadata = {
 };
 
 // --- SEUS IDs REAIS ---
-const GA4_MEASUREMENT_ID = 'G-V3HNTBMVQE'; // Seu ID do GA4
-const GTM_CONTAINER_ID = 'GTM-KXCGXCNF';   // Seu ID do GTM
-const YANDEX_METRICA_ID = 105756046;       // Seu ID do Yandex Metrica
-const CLARITY_ID = 'uix2492he4';          // Seu ID do Clarity
+const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE' ; // Seu ID do GA4
+const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';   // Seu ID do GTM
+const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;       // Seu ID do Yandex Metrica
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'uix2492he4';          // Seu ID do Clarity
 // --- FIM SEUS IDs REAIS ---
 
 export default function RootLayout({
