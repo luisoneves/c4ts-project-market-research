@@ -1,4 +1,6 @@
 // src/app/layout.tsx
+"use client"; // Necessário para usar Hooks do React e interagir com o DOM
+
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';

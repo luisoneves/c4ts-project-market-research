@@ -116,9 +116,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     await appendToSheet(sheetRow);
 
     const headers = new Headers();
-    headers.append('X-Clarity-Event', 'form_submitted'); // Para Clarity
-    headers.append('X-GA4-Event', 'form_submitted');     // Para GA4 via GTM
-    // O Yandex Metrica será chamado diretamente no frontend
+    headers.append('X-Clarity-Event', 'form_submitted');
+    headers.append('X-GA4-Event', 'form_submitted');
+    // O Yandex Metrica será chamado diretamente no frontend com window.ym
 
     return NextResponse.json({
       url: blob.url,
