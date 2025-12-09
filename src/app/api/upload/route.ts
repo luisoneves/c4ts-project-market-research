@@ -1,34 +1,46 @@
-
-import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request): Promise<NextResponse> {
-    const body = (await request.json()) as HandleUploadBody;
-
     try {
-        const jsonResponse = await handleUpload({
-            body,
-            request,
-            onBeforeGenerateToken: async () => {
-                // Authenticate the user here if needed
-                // For now, allowing public uploads (e.g., from the form)
-                return {
-                    allowedContentTypes: ['image/jpeg', 'image/png', 'application/pdf'],
-                    tokenPayload: JSON.stringify({
-                        // optional payload
-                    }),
-                };
-            },
-            onUploadCompleted: async ({ blob }) => {
-                console.log('blob uploaded', blob.url);
-            },
+        const formData = await request.formData();
+        const file = formData.get('file') as File;
+        const name = formData.get('name') as string;
+        const whatsapp = formData.get('whatsapp') as string;
+        const email = formData.get('email') as string || '';
+        const submissionId = formData.get('id') as string;
+
+        if (!file) {
+            return NextResponse.json(
+                { error: 'No file provided' },
+                { status: 400 }
+            );
+        }
+
+        // 👇 Aqui fica o nome único CERTO 👇
+        const uniqueName = `${submissionId}-${Date.now()}-${file.name}`;
+
+        const blob = await put(uniqueName, file, {
+            access: 'public',
+            addRandomSuffix: false, // já estamos gerando nome único
+            metadata: {
+                uploaderName: name,
+                uploaderWhatsapp: whatsapp,
+                uploaderEmail: email,
+                submissionId,
+            }
+        } as any);
+
+        return NextResponse.json({
+            url: blob.url,
+            id: submissionId
         });
 
-        return NextResponse.json(jsonResponse);
     } catch (error) {
+        console.error('Upload error:', error);
         return NextResponse.json(
             { error: (error as Error).message },
-            { status: 400 }, // The webhook will retry 5 times automatically if the status code is 500
+            { status: 500 }
         );
     }
 }

@@ -11,10 +11,17 @@
         },
         {
             "name": "whatsapp",
-            "label": "WhatsApp (com DDD)",
+            "label": "WhatsApp (opcional)",
             "type": "tel",
-            "required": true,
+            "required": false,
             "placeholder": "(11) 99999-9999"
+        },
+        {
+            "name": "email",
+            "label": "Email (opcional)",
+            "type": "email",
+            "required": false,
+            "placeholder": "seu@email.com"
         },
         {
             "name": "dor_principal",
