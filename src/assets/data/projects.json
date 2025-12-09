@@ -1,0 +1,23 @@
+{
+    "title": "Nossos Projetos",
+    "projects": [
+        {
+            "name": "BeautyCare",
+            "description": "Landing page + formulário de validação para salões afro.",
+            "type": "Validação de Mercado",
+            "status": "Em teste"
+        },
+        {
+            "name": "Gestão Capelas",
+            "description": "Sistema de agendamento e controle financeiro para capelas.",
+            "type": "Automação",
+            "status": "Concluído"
+        },
+        {
+            "name": "Mineração de Leads",
+            "description": "Automação de captação via WhatsApp + integração com CRM.",
+            "type": "Automação",
+            "status": "Em desenvolvimento"
+        }
+    ]
+}

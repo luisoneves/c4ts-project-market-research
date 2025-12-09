@@ -1,0 +1,41 @@
+{
+    "title": "Quer validar uma ideia?",
+    "subtitle": "Responda em 60 segundos e receba uma sugestão personalizada.",
+    "formAction": "https://formspree.io/f/xanrbrpj",
+    "fields": [
+        {
+            "name": "nome",
+            "label": "Nome",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "whatsapp",
+            "label": "WhatsApp (com DDD)",
+            "type": "tel",
+            "required": true,
+            "placeholder": "(11) 99999-9999"
+        },
+        {
+            "name": "dor_principal",
+            "label": "Qual seu principal desafio hoje?",
+            "type": "select",
+            "options": [
+                "Agendamento e lembretes",
+                "Receber pagamento (inadimplência, link)",
+                "Fidelizar clientes",
+                "Divulgar meu trabalho",
+                "Controlar estoque/serviços",
+                "Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "ideia",
+            "label": "(opcional) Qual ferramenta salvaria seu dia?",
+            "type": "textarea",
+            "required": false
+        }
+    ],
+    "submitLabel": "Quero validar minha ideia →"
+}

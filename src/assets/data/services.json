@@ -1,0 +1,20 @@
+{
+    "title": "Como podemos te ajudar?",
+    "services": [
+        {
+            "title": "Validação de Ideia",
+            "description": "Testamos sua ideia com landing pages e formulários em até 48h.",
+            "cta": "Quero validar minha ideia"
+        },
+        {
+            "title": "Automação de Processos",
+            "description": "Integramos WhatsApp, pagamentos e agendamentos para poupar seu tempo.",
+            "cta": "Automatizar meu negócio"
+        },
+        {
+            "title": "MVP em 2 semanas",
+            "description": "Construímos um protótipo funcional para testar com seus primeiros clientes.",
+            "cta": "Construir meu MVP"
+        }
+    ]
+}

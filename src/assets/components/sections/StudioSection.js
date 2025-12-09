@@ -1,18 +1,23 @@
-// src/assets/components/sections/StudioSection.js
+import studioData from '../../data/studio.json';
 
-export const StudioSection = () => `
-  <a href="#" class="grid-item bg-gray-700 text-white p-8 flex flex-col justify-between h-full">
-    <div class="grid-item-content">
-      <span class="text-gray-400 text-sm">03</span>
-      <h2 class="text-3xl font-bold mt-2 mb-4">The <span class="highlight">Studio</span></h2>
-      <p class="text-gray-400">
-        Meet our multidisciplinary team of designers, developers and strategists.
-      </p>
-    </div>
-    <div class="mt-8 flex justify-end">
-      <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
-        <i class="fas fa-arrow-right text-gray-400"></i>
+export function renderStudioSection() {
+  const section = document.createElement('section');
+  section.id = 'studio';
+  section.className = 'section studio-section bg-white dark:bg-gray-900 transition-colors duration-300';
+  section.innerHTML = `
+    <div class="container mx-auto px-6 py-12">
+      <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">${studioData.title}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">${studioData.tagline}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        ${studioData.description.map(paragraph => `<p class="text-gray-700 dark:text-gray-400">${paragraph}</p>`).join('')}
+      </div>
+      <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Nossos Valores</h3>
+        <ul class="list-disc pl-6 space-y-2">
+          ${studioData.values.map(value => `<li class="text-gray-700 dark:text-gray-400">${value}</li>`).join('')}
+        </ul>
       </div>
     </div>
-  </a>
-`;
+  `;
+  return section;
+}

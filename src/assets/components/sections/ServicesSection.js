@@ -1,18 +1,24 @@
-// src/assets/components/sections/ServicesSection.js
+import servicesData from '../../data/services.json';
 
-export const ServicesSection = () => `
-  <a href="#" class="grid-item bg-gray-900 text-white p-8 flex flex-col justify-between h-full">
-    <div class="grid-item-content">
-      <span class="text-gray-400 text-sm">01</span>
-      <h2 class="text-3xl font-bold mt-2 mb-4">Our <span class="highlight">Services</span></h2>
-      <p class="text-gray-400">
-        Product strategy, UX/UI design, prototyping and full-stack development for digital products.
-      </p>
-    </div>
-    <div class="mt-8 flex justify-end">
-      <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
-        <i class="fas fa-arrow-right text-gray-400"></i>
+export function renderServicesSection() {
+  const section = document.createElement('section');
+  section.id = 'services';
+  section.className = 'section services-section bg-gray-50 dark:bg-gray-800 transition-colors duration-300';
+  section.innerHTML = `
+    <div class="container mx-auto px-6 py-12">
+      <h2 class="text-3xl font-bold mb-8 text-gray-900 dark:text-white">${servicesData.title}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        ${servicesData.services.map(service => `
+          <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+            <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">${service.title}</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">${service.description}</p>
+            <button class="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
+              ${service.cta}
+            </button>
+          </div>
+        `).join('')}
       </div>
     </div>
-  </a>
-`;
+  `;
+  return section;
+}

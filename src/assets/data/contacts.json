@@ -1,0 +1,32 @@
+{
+    "title": "Vamos conversar sobre seu desafio?",
+    "description": "Entre em contato e vamos validar sua ideia juntos.",
+    "social": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/luisoneves",
+            "icon": "github"
+        },
+        {
+            "name": "LinkedIn",
+            "url": "https://linkedin.com/in/luisoneves",
+            "icon": "linkedin"
+        },
+        {
+            "name": "Telegram",
+            "url": "https://t.me/luisonevesdev",
+            "icon": "telegram"
+        }
+    ],
+    "contactInfo": [
+        {
+            "type": "email",
+            "value": "contato@c4ts.tech"
+        },
+        {
+            "type": "location",
+            "value": "São Paulo, SP"
+        }
+    ],
+    "copyright": "© 2025 C4TS — Laboratório de Soluções Digitais"
+}
