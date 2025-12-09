@@ -3,6 +3,17 @@ import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { google } from 'googleapis';
+import {
+    IMAGE_MIME_TYPES,
+    MimeType,
+    FileExtension,
+    IMAGE_PROCESSING,
+    GOOGLE_SHEETS_CONFIG,
+    ProcessingStatus,
+    FormField,
+    EVENT_HEADERS,
+    AnalyticsEvent,
+} from '@/constants';
 
 export const runtime = 'nodejs';
 
@@ -18,19 +29,19 @@ const appendToSheet = async (row: any[]) => {
   }
   try {
     const auth = new google.auth.GoogleAuth({
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      scopes: [GOOGLE_SHEETS_CONFIG.SCOPE],
       credentials: {
         client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
         private_key: GOOGLE_PRIVATE_KEY,
       },
     });
     const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: 'v4', auth: client });
+    const googleSheets = google.sheets({ version: GOOGLE_SHEETS_CONFIG.API_VERSION, auth: client as any });
 
     await googleSheets.spreadsheets.values.append({
       spreadsheetId: GOOGLE_SHEETS_ID,
-      range: 'Sheet1!A1',
-      valueInputOption: 'USER_ENTERED',
+      range: GOOGLE_SHEETS_CONFIG.RANGE,
+      valueInputOption: GOOGLE_SHEETS_CONFIG.VALUE_INPUT_OPTION,
       requestBody: {
         values: [row],
       },
@@ -45,11 +56,11 @@ const appendToSheet = async (row: any[]) => {
 export async function POST(request: Request): Promise<NextResponse> {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File;
-    const name = formData.get('name') as string;
-    const whatsapp = formData.get('whatsapp') as string;
-    const email = formData.get('email') as string || '';
-    const submissionId = formData.get('id') as string;
+    const file = formData.get(FormField.FILE) as File;
+    const name = formData.get(FormField.NAME) as string;
+    const whatsapp = formData.get(FormField.WHATSAPP) as string;
+    const email = formData.get(FormField.EMAIL) as string || '';
+    const submissionId = formData.get(FormField.ID) as string;
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -59,19 +70,26 @@ export async function POST(request: Request): Promise<NextResponse> {
     const originalName = file.name;
     let finalBuffer = buffer;
     let finalContentType = file.type;
-    let finalExtension = originalName.split('.').pop()?.toLowerCase() || 'bin';
+    let finalExtension = originalName.split('.').pop()?.toLowerCase() || FileExtension.BIN;
 
-    const isImage = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/gif'].includes(file.type);
+    const isImage = IMAGE_MIME_TYPES.includes(file.type as MimeType);
 
     if (isImage) {
       try {
+        // @ts-ignore - Type mismatch between sharp Buffer and Next.js Buffer
         finalBuffer = await sharp(buffer)
-          .resize({ width: 1600, withoutEnlargement: true })
-          .webp({ quality: 78, effort: 4 })
-          .toBuffer();
+          .resize({
+            width: IMAGE_PROCESSING.MAX_WIDTH,
+            withoutEnlargement: IMAGE_PROCESSING.RESIZE_WITHOUT_ENLARGEMENT
+          })
+          .webp({
+            quality: IMAGE_PROCESSING.WEBP_QUALITY,
+            effort: IMAGE_PROCESSING.WEBP_EFFORT
+          })
+          .toBuffer() as any as Buffer;
 
-        finalContentType = 'image/webp';
-        finalExtension = 'webp';
+        finalContentType = MimeType.WEBP;
+        finalExtension = FileExtension.WEBP;
       } catch (imgErr) {
         console.warn(`[SHARP] Falha ao processar imagem ${originalName}. Enviando original.`, imgErr);
       }
@@ -98,7 +116,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         uploaderEmail: email,
         submissionId,
         originalFileName: originalName,
-        processed: isImage ? 'yes' : 'no',
+        processed: isImage ? ProcessingStatus.YES : ProcessingStatus.NO,
       },
     } as any);
 
@@ -110,14 +128,14 @@ export async function POST(request: Request): Promise<NextResponse> {
       email,
       blob.url,
       originalName,
-      isImage ? 'yes' : 'no',
+      isImage ? ProcessingStatus.YES : ProcessingStatus.NO,
       finalContentType,
     ];
     await appendToSheet(sheetRow);
 
     const headers = new Headers();
-    headers.append('X-Clarity-Event', 'form_submitted'); // Para Clarity
-    headers.append('X-GA4-Event', 'form_submitted');     // Para GA4 via GTM
+    headers.append(EVENT_HEADERS.CLARITY, AnalyticsEvent.FORM_SUBMITTED);
+    headers.append(EVENT_HEADERS.GA4, AnalyticsEvent.FORM_SUBMITTED);
     // O Yandex Metrica será chamado diretamente no frontend
 
     return NextResponse.json({

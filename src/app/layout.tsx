@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import Sidebar from '@/components/Sidebar';
 import Script from 'next/script';
+import { ANALYTICS_IDS, ScriptStrategy } from '@/constants';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -77,12 +78,11 @@ export const metadata: Metadata = {
   },
 };
 
-// --- SEUS IDs REAIS ---
-const GA4_MEASUREMENT_ID = 'G-V3HNTBMVQE'; // Seu ID do GA4
-const GTM_CONTAINER_ID = 'GTM-KXCGXCNF';   // Seu ID do GTM
-const YANDEX_METRICA_ID = 105756046;       // Seu ID do Yandex Metrica
-const CLARITY_ID = 'uix2492he4';          // Seu ID do Clarity
-// --- FIM SEUS IDs REAIS ---
+// Analytics IDs are now centralized in constants
+const GA4_MEASUREMENT_ID = ANALYTICS_IDS.GA4;
+const GTM_CONTAINER_ID = ANALYTICS_IDS.GTM;
+const YANDEX_METRICA_ID = ANALYTICS_IDS.YANDEX;
+const CLARITY_ID = ANALYTICS_IDS.CLARITY;
 
 export default function RootLayout({
   children,
@@ -95,7 +95,7 @@ export default function RootLayout({
         {/* Google Tag Manager (GTM) - Head */}
         <Script
           id="gtm-script-head"
-          strategy="afterInteractive"
+          strategy={ScriptStrategy.AFTER_INTERACTIVE}
           dangerouslySetInnerHTML={{
             __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -117,7 +117,7 @@ export default function RootLayout({
         {/* Microsoft Clarity */}
         <Script
           id="clarity-script"
-          strategy="afterInteractive"
+          strategy={ScriptStrategy.AFTER_INTERACTIVE}
           dangerouslySetInnerHTML={{
             __html: `
               (function(c,l,a,r,i,t,y){
@@ -132,13 +132,13 @@ export default function RootLayout({
         {/* Google Analytics 4 (GA4) - Configuração inicial */}
         <Script
           id="ga4-script"
-          strategy="afterInteractive"
+          strategy={ScriptStrategy.AFTER_INTERACTIVE}
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
         />
         <Script
           id="ga4-config"
-          strategy="afterInteractive"
+          strategy={ScriptStrategy.AFTER_INTERACTIVE}
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -152,7 +152,7 @@ export default function RootLayout({
         {/* Yandex.Metrika counter */}
         <Script
           id="yandex-metrika-script"
-          strategy="afterInteractive"
+          strategy={ScriptStrategy.AFTER_INTERACTIVE}
           dangerouslySetInnerHTML={{
             __html: `
               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -172,7 +172,7 @@ export default function RootLayout({
           }}
         />
         <noscript>
-            <div><img src="https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}" style="position:absolute; left:-9999px;" alt="" /></div>
+            <div><img src={`https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}`} style={{position: 'absolute', left: '-9999px'}} alt="" /></div>
         </noscript>
 
         <Sidebar />

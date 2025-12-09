@@ -3,29 +3,30 @@
 import { useState, useEffect } from 'react';
 import { Github, Linkedin, Send, Moon, Sun, Mail, MapPin } from 'lucide-react';
 import contactsData from '../data/contacts.json';
+import { ThemeMode, LocalStorageKey, THEME_CLASSES, SocialIcon } from '@/constants';
 
 export default function Sidebar() {
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
         // Check local storage or system preference
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem(LocalStorageKey.THEME) === ThemeMode.DARK || (!(LocalStorageKey.THEME in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             setDarkMode(true);
-            document.documentElement.classList.add('dark');
+            document.documentElement.classList.add(THEME_CLASSES.DARK);
         } else {
             setDarkMode(false);
-            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove(THEME_CLASSES.DARK);
         }
     }, []);
 
     const toggleTheme = () => {
         if (darkMode) {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
+            document.documentElement.classList.remove(THEME_CLASSES.DARK);
+            localStorage.setItem(LocalStorageKey.THEME, ThemeMode.LIGHT);
             setDarkMode(false);
         } else {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
+            document.documentElement.classList.add(THEME_CLASSES.DARK);
+            localStorage.setItem(LocalStorageKey.THEME, ThemeMode.DARK);
             setDarkMode(true);
         }
     };
@@ -62,12 +63,11 @@ export default function Sidebar() {
             <div>
                 <div className="flex space-x-6 mb-8">
                     {contactsData.social.map((social) => {
-                        // Map icon names from JSON to Lucide components if desired, or just use generic logic
-                        // For simplicity, hardcoding icons based on name or using a mapped object
+                        // Map icon names from JSON to Lucide components
                         let Icon = Send; // Default
-                        if (social.name === 'GitHub') Icon = Github;
-                        if (social.name === 'LinkedIn') Icon = Linkedin;
-                        if (social.name === 'Telegram') Icon = Send;
+                        if (social.name === SocialIcon.GITHUB) Icon = Github;
+                        if (social.name === SocialIcon.LINKEDIN) Icon = Linkedin;
+                        if (social.name === SocialIcon.TELEGRAM) Icon = Send;
 
                         return (
                             <a

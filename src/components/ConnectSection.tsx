@@ -1,7 +1,14 @@
+"use client";
 // src/components/ConnectSection.tsx
-import React, { useState, useRef, useEffect } from 'react';
-// Opcional: importar Script do next/script se precisar carregar scripts de forma dinâmica
-// import Script from 'next/script';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    ANALYTICS_IDS,
+    AnalyticsEvent,
+    EventCategory,
+    FormField,
+    VALIDATION_MESSAGES,
+    ID_GENERATION,
+} from '@/constants';
 
 declare global {
   interface Window {
@@ -11,11 +18,6 @@ declare global {
     ym: (...args: any[]) => void;
   }
 }
-
-// IDs de rastreamento (para usar no frontend) - Use variáveis de ambiente NEXT_PUBLIC_
-const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE';
-const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';
-const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;
 
 const ConnectSection: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -27,7 +29,10 @@ const ConnectSection: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    setSubmissionId(`sub-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
+    setSubmissionId(`sub-${Date.now()}-${Math.random().toString(ID_GENERATION.TIMESTAMP_RADIX).substring(
+        ID_GENERATION.TIMESTAMP_SUBSTRING_START,
+        ID_GENERATION.TIMESTAMP_SUBSTRING_END
+    )}`);
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,16 +45,16 @@ const ConnectSection: React.FC = () => {
     e.preventDefault();
 
     if (!file || !name || !whatsapp || !submissionId) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
+      alert(VALIDATION_MESSAGES.REQUIRED_FIELDS);
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('name', name);
-    formData.append('whatsapp', whatsapp);
-    formData.append('email', email);
-    formData.append('id', submissionId);
+    formData.append(FormField.FILE, file);
+    formData.append(FormField.NAME, name);
+    formData.append(FormField.WHATSAPP, whatsapp);
+    formData.append(FormField.EMAIL, email);
+    formData.append(FormField.ID, submissionId);
 
     try {
       const response = await fetch('/api/upload', {
@@ -70,35 +75,38 @@ const ConnectSection: React.FC = () => {
         const ga4EventHeader = response.headers.get('X-GA4-Event');
         if (ga4EventHeader && window.gtag) {
           window.gtag('event', ga4EventHeader, {
-            event_category: 'form_submission',
+            event_category: EventCategory.FORM,
             event_label: `Submission ID: ${submissionId}`,
             value: 1,
           });
         }
 
-        if (window.ym && YANDEX_METRICA_ID !== 105756046) { // Verifica se o ID não é o placeholder
-          window.ym(YANDEX_METRICA_ID, 'reachGoal', 'form_submitted', {
+        if (window.ym && ANALYTICS_IDS.YANDEX !== 105756046) { // Verifica se o ID não é o placeholder
+          window.ym(ANALYTICS_IDS.YANDEX, 'reachGoal', AnalyticsEvent.FORM_SUBMITTED, {
             submissionId: submissionId,
             fileName: file.name,
           });
         }
 
-        alert('Formulário enviado com sucesso! Sua solicitação está sendo processada.');
+        alert(`${VALIDATION_MESSAGES.SUCCESS} ${VALIDATION_MESSAGES.PROCESSING}`);
         formRef.current?.reset();
         setFile(null);
         setName('');
         setWhatsapp('');
         setEmail('');
-        setSubmissionId(`sub-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
+        setSubmissionId(`sub-${Date.now()}-${Math.random().toString(ID_GENERATION.TIMESTAMP_RADIX).substring(
+            ID_GENERATION.TIMESTAMP_SUBSTRING_START,
+            ID_GENERATION.TIMESTAMP_SUBSTRING_END
+        )}`);
 
       } else {
         const errorData = await response.json();
         console.error('Upload failed:', errorData.error);
-        alert(`Falha ao enviar formulário: ${errorData.error || 'Erro desconhecido'}`);
+        alert(`${VALIDATION_MESSAGES.UPLOAD_FAILED}: ${errorData.error || 'Erro desconhecido'}`);
       }
     } catch (error) {
       console.error('Network or submission error:', error);
-      alert('Ocorreu um erro ao tentar enviar o formulário.');
+      alert(VALIDATION_MESSAGES.SUBMISSION_ERROR);
     }
   };
 
