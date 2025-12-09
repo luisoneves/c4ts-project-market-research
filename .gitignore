@@ -1,25 +1,8 @@
-# Parcel cache
-.parcel-cache/
-
-# Build output
-dist/
-
-# Node modules
+#.gitignore
 node_modules/
-
-# Sass cache
-*.css
-*.css.map
-
-# System files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Env files
+dist/
+.parcel-cache/
 .env
-
-# Husky internals
+.DS_Store
 .husky/_/
+*.log
