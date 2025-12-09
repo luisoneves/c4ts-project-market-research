@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { upload } from '@vercel/blob/client';
 import questionsData from '../data/questions.json';
 
 export default function QuestionsSection() {
@@ -17,24 +17,13 @@ export default function QuestionsSection() {
         setStatus('Uploading...');
 
         try {
-            const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
-            const { data, error } = await supabase.storage
-                .from('uploads')
-                .upload(fileName, file);
+            const newBlob = await upload(file.name, file, {
+                access: 'public',
+                handleUploadUrl: '/api/upload',
+            });
 
-            if (error) {
-                throw error;
-            }
-
-            // Get public URL
-            const { data: publicUrlData } = supabase.storage
-                .from('uploads')
-                .getPublicUrl(fileName);
-
-            if (publicUrlData) {
-                setFileUrl(publicUrlData.publicUrl);
-                setStatus('Upload complete!');
-            }
+            setFileUrl(newBlob.url);
+            setStatus('Upload complete!');
         } catch (error: any) {
             console.error('Upload Error:', error);
             setStatus(`Upload failed: ${error.message}`);
