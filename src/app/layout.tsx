@@ -2,6 +2,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import Sidebar from '@/components/Sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -23,6 +24,7 @@ export default function RootLayout({
         <main className="ml-80 w-[calc(100%-20rem)] min-h-screen">
           {children}
         </main>
+        <Analytics />
       </body>
     </html>
   )
