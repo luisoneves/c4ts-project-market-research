@@ -1,12 +1,9 @@
-// src/app/layout.tsx
-"use client"; // Necessário para usar Hooks do React e interagir com o DOM
-
+// src/app/layout.tsx (Server Component)
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/next';
-import Sidebar from '@/components/Sidebar';
 import Script from 'next/script';
+import LayoutClient from './layout.client'; // Importa o Client Component
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -80,10 +77,10 @@ export const metadata: Metadata = {
 };
 
 // --- SEUS IDs REAIS ---
-const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE' ; // Seu ID do GA4
-const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';   // Seu ID do GTM
-const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;       // Seu ID do Yandex Metrica
-const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'uix2492he4';          // Seu ID do Clarity
+const GA4_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-V3HNTBMVQE';
+const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-KXCGXCNF';
+const YANDEX_METRICA_ID = process.env.NEXT_PUBLIC_YANDEX_METRICA_ID ? parseInt(process.env.NEXT_PUBLIC_YANDEX_METRICA_ID) : 105756046;
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || 'uix2492he4';
 // --- FIM SEUS IDs REAIS ---
 
 export default function RootLayout({
@@ -177,10 +174,10 @@ export default function RootLayout({
             <div><img src="https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}" style="position:absolute; left:-9999px;" alt="" /></div>
         </noscript>
 
-        <Sidebar />
-        <main className="ml-80 w-[calc(100%-20rem)] min-h-screen">
+        <LayoutClient>
           {children}
-        </main>
+        </LayoutClient>
+
         <Analytics />
       </body>
     </html>
