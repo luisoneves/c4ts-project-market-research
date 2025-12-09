@@ -1,11 +1,12 @@
 // src/app/layout.tsx
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import Sidebar from '@/components/Sidebar'
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
+import Sidebar from '@/components/Sidebar';
+import Script from 'next/script';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
@@ -47,8 +48,8 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    site: '@luistech',
-    creator: '@luistech',
+    site: '@luistech', // Verifique se este @ é o correto ou ajuste
+    creator: '@luistech', // Verifique se este @ é o correto ou ajuste
     title: 'C4TS — Laboratório de Soluções Digitais',
     description:
       'Validamos ideias com dados reais — sem achismo. MVP em 2 semanas.',
@@ -76,16 +77,45 @@ export const metadata: Metadata = {
   },
 };
 
+// --- SEUS IDs REAIS ---
+const GA4_MEASUREMENT_ID = 'G-V3HNTBMVQE'; // Seu ID do GA4
+const GTM_CONTAINER_ID = 'GTM-KXCGXCNF';   // Seu ID do GTM
+const YANDEX_METRICA_ID = 105756046;       // Seu ID do Yandex Metrica
+const CLARITY_ID = 'uix2492he4';          // Seu ID do Clarity
+// --- FIM SEUS IDs REAIS ---
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
-        {/* ✅ Microsoft Clarity — script assíncrono */}
-        <script
+        {/* Google Tag Manager (GTM) - Head */}
+        <Script
+          id="gtm-script-head"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');
+            `,
+          }}
+        />
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          ></iframe>
+        </noscript>
+
+        {/* Microsoft Clarity */}
+        <Script
           id="clarity-script"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -94,11 +124,57 @@ export default function RootLayout({
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "uix2492he4");
+              })(window, document, "clarity", "script", "${CLARITY_ID}");
             `,
           }}
         />
-        
+
+        {/* Google Analytics 4 (GA4) - Configuração inicial */}
+        <Script
+          id="ga4-script"
+          strategy="afterInteractive"
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
+        />
+        <Script
+          id="ga4-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA4_MEASUREMENT_ID}');
+            `,
+          }}
+        />
+
+        {/* Yandex.Metrika counter */}
+        <Script
+          id="yandex-metrika-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+              m[i].l=1*new Date();
+              for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+              k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+              })(window, document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
+
+              ym(${YANDEX_METRICA_ID}, 'init', {
+                  clickmap:true,
+                  trackLinks:true,
+                  accurateTrackBounce:true,
+                  webvisor:true,
+                  trackHash:true
+              });
+            `,
+          }}
+        />
+        <noscript>
+            <div><img src="https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}" style="position:absolute; left:-9999px;" alt="" /></div>
+        </noscript>
+
         <Sidebar />
         <main className="ml-80 w-[calc(100%-20rem)] min-h-screen">
           {children}
