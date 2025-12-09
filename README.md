@@ -20,5 +20,6 @@ Um portfólio técnico focado em **validação de ideias com dados reais**, cons
 ## 📦 Como rodar localmente
 
 ```bash
+# Node 20+ recomendado (Next.js >= 20.9)
 yarn install
 yarn dev

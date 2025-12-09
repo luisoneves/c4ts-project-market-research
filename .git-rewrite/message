@@ -1,0 +1,9 @@
+feat: Implementa GA4, GTM, Yandex Metrica e aprimora eventos de telemetria
+
+Integra Google Analytics (GA4), Google Tag Manager (GTM), e Yandex Metrica com os IDs corretos.
+
+Atualiza layout.tsx com scripts de rastreamento GA4, GTM e Yandex Metrica.
+
+Aprimora o endpoint de upload para disparar eventos em Clarity, GA4 e Yandex Metrica via headers e chamada direta.
+
+Adiciona variáveis de ambiente NEXT_PUBLIC_* para IDs de rastreamento no frontend.

@@ -2,6 +2,13 @@
   "name": "c4ts-project-market-research",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "volta": {
+    "node": "20.19.6",
+    "yarn": "4.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

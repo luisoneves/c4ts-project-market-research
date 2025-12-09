@@ -10,25 +10,30 @@ export default function Sidebar() {
 
     useEffect(() => {
         // Check local storage or system preference
-        if (localStorage.getItem(LocalStorageKey.THEME) === ThemeMode.DARK || (!(LocalStorageKey.THEME in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setDarkMode(true);
+        const stored = localStorage.getItem(LocalStorageKey.THEME);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const shouldDark = stored === ThemeMode.DARK || (!stored && prefersDark);
+        console.log('[theme] hydrate', { stored, prefersDark, shouldDark });
+        if (shouldDark) {
             document.documentElement.classList.add(THEME_CLASSES.DARK);
+            setDarkMode(true);
         } else {
-            setDarkMode(false);
             document.documentElement.classList.remove(THEME_CLASSES.DARK);
+            setDarkMode(false);
         }
     }, []);
 
     const toggleTheme = () => {
-        if (darkMode) {
-            document.documentElement.classList.remove(THEME_CLASSES.DARK);
-            localStorage.setItem(LocalStorageKey.THEME, ThemeMode.LIGHT);
-            setDarkMode(false);
-        } else {
+        const next = !darkMode;
+        console.log('[theme] toggle', { from: darkMode, to: next });
+        if (next) {
             document.documentElement.classList.add(THEME_CLASSES.DARK);
             localStorage.setItem(LocalStorageKey.THEME, ThemeMode.DARK);
-            setDarkMode(true);
+        } else {
+            document.documentElement.classList.remove(THEME_CLASSES.DARK);
+            localStorage.setItem(LocalStorageKey.THEME, ThemeMode.LIGHT);
         }
+        setDarkMode(next);
     };
 
     return (
