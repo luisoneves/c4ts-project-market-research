@@ -7,8 +7,8 @@ import { MetaTags } from './assets/components/meta/MetaTags.js';
 document.head.innerHTML += MetaTags();
 
 // 🧩 Componentes Estruturais
-import { Sidebar } from './assets/components/Sidebar.js';
-import { MainContent } from './assets/components/MainContent.js';
+import { renderSidebar } from './assets/components/Sidebar.js';
+import { renderMainContent } from './assets/components/MainContent.js';
 
 // Função para montar o layout da aplicação
 function App() {
@@ -17,7 +17,13 @@ function App() {
     console.error('Elemento #app não encontrado no DOM.');
     return;
   }
-  appContainer.innerHTML = `${Sidebar()}${MainContent()}`;
+
+  // Clear container
+  appContainer.innerHTML = '';
+
+  // Append Components
+  appContainer.appendChild(renderSidebar());
+  appContainer.appendChild(renderMainContent());
 }
 
 // Inicializa a aplicação
