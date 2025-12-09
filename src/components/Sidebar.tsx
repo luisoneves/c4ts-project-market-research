@@ -199,7 +199,8 @@ export default function Sidebar() {
             </aside>
             <button
                 onClick={toggleCollapsed}
-                className="absolute top-6 -right-4 w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-[60]"
+                className="fixed top-6 w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-[60]"
+                style={{ left: 'var(--sidebar-width)', transform: 'translateX(calc(50% - 30px))' }}
                 aria-label={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
             >
                 {collapsed ? '>' : '<'}
