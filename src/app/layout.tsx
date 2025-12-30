@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next';
 import Sidebar from '@/components/Sidebar';
 import Script from 'next/script';
 import { ANALYTICS_IDS, ScriptStrategy } from '@/constants';
+import LayoutClient from './layout.client';
 
 export const metadata: Metadata = {
   title: {
@@ -175,7 +176,9 @@ export default function RootLayout({
         <div className="flex">
           <Sidebar />
           <main className="flex-1 min-h-screen transition-all duration-300">
-            {children}
+            <LayoutClient>
+              {children}
+            </LayoutClient>
           </main>
         </div>
         <Analytics />
