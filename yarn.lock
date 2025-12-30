@@ -202,10 +202,18 @@
 "@img/sharp-libvips-linux-x64@1.2.4":
   version "1.2.4"
 
+"@img/sharp-libvips-linuxmusl-x64@1.2.4":
+  version "1.2.4"
+
 "@img/sharp-linux-x64@0.34.5":
   version "0.34.5"
   optionalDependencies:
     "@img/sharp-libvips-linux-x64" "1.2.4"
+
+"@img/sharp-linuxmusl-x64@0.34.5":
+  version "0.34.5"
+  optionalDependencies:
+    "@img/sharp-libvips-linuxmusl-x64" "1.2.4"
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
@@ -252,6 +260,9 @@
 "@next/swc-linux-x64-gnu@16.0.8":
   version "16.0.8"
 
+"@next/swc-linux-x64-musl@16.0.8":
+  version "16.0.8"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   dependencies:
@@ -293,6 +304,9 @@
     tailwindcss "4.1.17"
 
 "@tailwindcss/oxide-linux-x64-gnu@4.1.17":
+  version "4.1.17"
+
+"@tailwindcss/oxide-linux-x64-musl@4.1.17":
   version "4.1.17"
 
 "@tailwindcss/oxide@4.1.17":
@@ -424,6 +438,9 @@
     eslint-visitor-keys "^4.2.1"
 
 "@unrs/resolver-binding-linux-x64-gnu@1.11.1":
+  version "1.11.1"
+
+"@unrs/resolver-binding-linux-x64-musl@1.11.1":
   version "1.11.1"
 
 "@vercel/analytics@^1.6.1":
@@ -1590,6 +1607,9 @@ levn@^0.4.1:
     type-check "~0.4.0"
 
 lightningcss-linux-x64-gnu@1.30.2:
+  version "1.30.2"
+
+lightningcss-linux-x64-musl@1.30.2:
   version "1.30.2"
 
 lightningcss@1.30.2:
