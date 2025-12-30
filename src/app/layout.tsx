@@ -1,5 +1,6 @@
 // src/app/layout.tsx
 import './globals.css';
+import LayoutClient from './layout.client';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
@@ -96,65 +97,66 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-50 dark:bg-gray-900 transition-colors duration-300`}>
-        {/* Scripts de Telemetria */}
-        <Script
-          id="gtm-script-head"
-          strategy={ScriptStrategy.AFTER_INTERACTIVE}
-          dangerouslySetInnerHTML={{
-            __html: `
+        <LayoutClient>
+          {/* Scripts de Telemetria */}
+          <Script
+            id="gtm-script-head"
+            strategy={ScriptStrategy.AFTER_INTERACTIVE}
+            dangerouslySetInnerHTML={{
+              __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');
             `,
-          }}
-        />
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          ></iframe>
-        </noscript>
+            }}
+          />
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            ></iframe>
+          </noscript>
 
-        <Script
-          id="clarity-script"
-          strategy={ScriptStrategy.AFTER_INTERACTIVE}
-          dangerouslySetInnerHTML={{
-            __html: `
+          <Script
+            id="clarity-script"
+            strategy={ScriptStrategy.AFTER_INTERACTIVE}
+            dangerouslySetInnerHTML={{
+              __html: `
               (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
               })(window, document, "clarity", "script", "${CLARITY_ID}");
             `,
-          }}
-        />
+            }}
+          />
 
-        <Script
-          id="ga4-script"
-          strategy={ScriptStrategy.AFTER_INTERACTIVE}
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
-        />
-        <Script
-          id="ga4-config"
-          strategy={ScriptStrategy.AFTER_INTERACTIVE}
-          dangerouslySetInnerHTML={{
-            __html: `
+          <Script
+            id="ga4-script"
+            strategy={ScriptStrategy.AFTER_INTERACTIVE}
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
+          />
+          <Script
+            id="ga4-config"
+            strategy={ScriptStrategy.AFTER_INTERACTIVE}
+            dangerouslySetInnerHTML={{
+              __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${GA4_MEASUREMENT_ID}');
             `,
-          }}
-        />
+            }}
+          />
 
-        <Script
-          id="yandex-metrika-script"
-          strategy={ScriptStrategy.AFTER_INTERACTIVE}
-          dangerouslySetInnerHTML={{
-            __html: `
+          <Script
+            id="yandex-metrika-script"
+            strategy={ScriptStrategy.AFTER_INTERACTIVE}
+            dangerouslySetInnerHTML={{
+              __html: `
               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
               m[i].l=1*new Date();
               for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -169,19 +171,20 @@ export default function RootLayout({
                   trackHash:true
               });
             `,
-          }}
-        />
-        <noscript>
-            <div><img src={`https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}`} style={{position: 'absolute', left: '-9999px'}} alt="" /></div>
-        </noscript>
+            }}
+          />
+          <noscript>
+            <div><img src={`https://mc.yandex.ru/watch/${YANDEX_METRICA_ID}`} style={{ position: 'absolute', left: '-9999px' }} alt="" /></div>
+          </noscript>
 
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 min-h-screen transition-all duration-300">
-            {children}
-          </main>
-        </div>
-        <Analytics />
+          <div className="flex">
+            <Sidebar />
+            <main className="flex-1 min-h-screen transition-all duration-300">
+              {children}
+            </main>
+          </div>
+          <Analytics />
+        </LayoutClient>
       </body>
     </html>
   );

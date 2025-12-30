@@ -2,6 +2,12 @@
 
 Um portfólio técnico focado em **validação de ideias com dados reais**, construído com Next.js 16, App Router e boas práticas de performance e SEO.
 
+> ⚠️ **Protótipo em desenvolvimento**
+> Este projeto usa dados mockados para fins de demonstração.
+> - Login Admin: `luis@c4ts.com` / `123456`
+> - Login Cliente: `cliente@cliente.com` / `123456`
+> Nenhum dado é persistido em servidor.
+
 ## 🚀 Funcionalidades
 
 - ✅ **Upload de arquivos otimizado**: imagens convertidas para WebP com Sharp (até 80% menor)
@@ -23,3 +29,4 @@ Um portfólio técnico focado em **validação de ideias com dados reais**, cons
 # Node 20+ recomendado (Next.js >= 20.9)
 yarn install
 yarn dev
+```
