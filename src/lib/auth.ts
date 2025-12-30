@@ -22,10 +22,14 @@ export class AuthService {
       role: user.role
     };
 
-    // Save to localStorage
+    // Save to localStorage and cookies
     if (typeof window !== 'undefined') {
       localStorage.setItem(AUTH_TOKEN_KEY, token);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(userWithoutPassword));
+      
+      // Set cookie for middleware
+      document.cookie = `c4ts_auth_token=${token}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+      document.cookie = `c4ts_auth_user=${encodeURIComponent(JSON.stringify(userWithoutPassword))}; path=/; max-age=${60 * 60 * 24 * 7}`;
     }
 
     return {
@@ -38,6 +42,10 @@ export class AuthService {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(AUTH_TOKEN_KEY);
       localStorage.removeItem(AUTH_USER_KEY);
+      
+      // Clear cookies
+      document.cookie = 'c4ts_auth_token=; path=/; max-age=0';
+      document.cookie = 'c4ts_auth_user=; path=/; max-age=0';
     }
   }
 
